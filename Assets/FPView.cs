@@ -10,10 +10,6 @@ using UnityEngine;
 /**
  * Handles the first-person view of the player
  *
- * @TODO handle rotation such that the entire player body rotates, instead of just the eyes
- * @TODO clamp pitch to not allow "backflips"
- * @TODO handle gravity
- *
  */
 public class FPView : MonoBehaviour {
     public float speed = 10.0f;         // controls player movement speed
@@ -47,15 +43,20 @@ public class FPView : MonoBehaviour {
         Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 
         // view rotation
-        yaw   = Input.GetAxis("Mouse X") * sensitivity;
-        pitch = Input.GetAxis("Mouse Y") * sensitivity;
-        
-        transform.Rotate(0, yaw, 0);
-        eyes.transform.Rotate(-pitch, 0, 0);
+        yaw   += Input.GetAxis("Mouse X") * sensitivity;
+        pitch -= Input.GetAxis("Mouse Y") * sensitivity;
+
+        // clamps the angle of vision of the player
+        transform.eulerAngles = new Vector3(Mathf.Clamp(pitch, -40f, 40f), yaw, 0f);
 
         // move player relative to current orientation
         movement = transform.rotation * movement;
         player.Move(movement * Time.deltaTime);
+
+        // prevent the player from "flying"
+        Vector3 temp = transform.position;
+        temp.y = Mathf.Clamp(transform.position.y, 0, 1);
+        transform.position = temp;
 
         // unlocks and unhides the mouse cursor
         if (Input.GetKeyDown(KeyCode.Escape))

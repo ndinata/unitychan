@@ -10,10 +10,6 @@ using UnityEngine;
 /**
  * Handles the first-person view of the player
  *
- * @TODO handle rotation such that the entire player body rotates, instead of just the eyes
- * @TODO clamp pitch to not allow "backflips"
- * @TODO handle gravity
- *
  */
 public class FPView : MonoBehaviour {
     public float speed = 10.0f;         // controls player movement speed
@@ -22,6 +18,8 @@ public class FPView : MonoBehaviour {
     CharacterController player;
 
     public GameObject eyes;             // handles view of the player (camera)
+
+    public GameObject text;             // the initial "start" text
 
     // view rotation direction
     float yaw;
@@ -35,11 +33,22 @@ public class FPView : MonoBehaviour {
         // uses CharacterController to handle collision
 		player = GetComponent<CharacterController> ();
 
+        // initialises the position of the camera/view
+        eyes.transform.localPosition = new Vector3(0, 5.5f, -8);
+        eyes.transform.localRotation = Quaternion.Euler(25.0f, 0, 0);
+
         // locks and hides the mouse cursor
         Cursor.lockState = CursorLockMode.Locked;
 	}
 	
 	void Update () {
+
+        // move the camera to become the "eyes" of the player
+        if (Input.GetKeyDown("space")) {
+            eyes.transform.localPosition = new Vector3(0, 0f, 0.2f);
+            eyes.transform.localRotation = Quaternion.identity;
+            text.SetActive(false);
+        }
 
         // player movement
 		moveHorizontal = Input.GetAxis("Horizontal") * speed;
@@ -47,15 +56,20 @@ public class FPView : MonoBehaviour {
         Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 
         // view rotation
-        yaw   = Input.GetAxis("Mouse X") * sensitivity;
-        pitch = Input.GetAxis("Mouse Y") * sensitivity;
-        
-        transform.Rotate(0, yaw, 0);
-        eyes.transform.Rotate(-pitch, 0, 0);
+        yaw   += Input.GetAxis("Mouse X") * sensitivity;
+        pitch -= Input.GetAxis("Mouse Y") * sensitivity;
+
+        // clamps the angle of vision of the player
+        transform.eulerAngles = new Vector3(Mathf.Clamp(pitch, -40f, 40f), yaw, 0f);
 
         // move player relative to current orientation
         movement = transform.rotation * movement;
         player.Move(movement * Time.deltaTime);
+
+        // prevent the player from "flying"
+        Vector3 temp = transform.position;
+        //temp.y = Mathf.Clamp(transform.position.y, 5, 5);
+        transform.position = temp;
 
         // unlocks and unhides the mouse cursor
         if (Input.GetKeyDown(KeyCode.Escape))

@@ -8,20 +8,19 @@ public class SpikeAnimation : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
         i = 0;
         foreach (AnimationState state in anim)
         {
-            if (i==3) {
+            if (i == 3)
+            {
                 state.speed = 0.1f;
             }
-            print(i);
             i++;
         }
+    }
+	
+	// Update is called once per frame
+	void Update () {
+      
     }
 }

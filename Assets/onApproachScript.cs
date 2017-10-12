@@ -19,7 +19,7 @@ public class onApproachScript : MonoBehaviour {
         {
             closeby = true;
             //NEED TO CHANGE THE PRINT TO UI ACTION
-            print(closeby);
+            
         }
         else
         {

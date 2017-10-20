@@ -19,8 +19,6 @@ public class FPView : MonoBehaviour {
 
     public GameObject eyes;             // handles view of the player (camera)
 
-    public GameObject text;             // the initial "start" text
-
     // view rotation direction
     float yaw;
     float pitch;
@@ -33,22 +31,11 @@ public class FPView : MonoBehaviour {
         // uses CharacterController to handle collision
 		player = GetComponent<CharacterController> ();
 
-        // initialises the position of the camera/view
-        eyes.transform.localPosition = new Vector3(0, 5.5f, -8);
-        eyes.transform.localRotation = Quaternion.Euler(25.0f, 0, 0);
-
         // locks and hides the mouse cursor
         Cursor.lockState = CursorLockMode.Locked;
 	}
 	
 	void Update () {
-
-        // move the camera to become the "eyes" of the player
-        if (Input.GetKeyDown("space")) {
-            eyes.transform.localPosition = new Vector3(0, 0.5f, 0);
-            eyes.transform.localRotation = Quaternion.identity;
-            text.SetActive(false);
-        }
 
         // player movement
 		moveHorizontal = Input.GetAxis("Horizontal") * speed;

@@ -97,7 +97,7 @@ Shader "Unlit/CelShader"
 				float3 specularReflection = _SpecColor.xyz * specularCutOff;
 
 				float3 combinedLight = (ambientLight+diffuseReflection) * outlineStrength + specularReflection;
-				return float4(combinedLight, 1.0);
+				return float4(combinedLight, 1.0);//+ tex2D(_MainTex, input.uv);
 				// sample the texture
 				
 			}

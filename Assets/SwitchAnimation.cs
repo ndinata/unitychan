@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class SwitchAnimation : MonoBehaviour {
     public GameObject player;
-    public GameObject wall;
+    //public GameObject wall;
     public GameObject laser;
+    public GameObject lever;
     private float distance;
-    private int CLOSE_THRESHOLD = 15;
+    private int CLOSE_THRESHOLD = 20;
     private bool closeby = false;
     private bool switched = false;
 
@@ -23,7 +24,6 @@ public class SwitchAnimation : MonoBehaviour {
         {
             closeby = true;
             //NEED TO CHANGE THE PRINT TO UI ACTION
-            print(closeby);
         }
         else
         {
@@ -40,14 +40,9 @@ public class SwitchAnimation : MonoBehaviour {
 
         if (switched == true)
         {
-            if (this.transform.position.y < 40)
-            {
-                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z);
-            } else
-            {
-                wall.transform.position = new Vector3(wall.transform.position.x, wall.transform.position.y + 200, wall.transform.position.z);
-                laser.SetActive(false);
-            } 
+            lever.transform.localPosition = new Vector3(0, 0.20f, 1.65f);
+
+            laser.SetActive(false); 
 
         }
     }

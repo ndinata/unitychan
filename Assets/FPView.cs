@@ -20,7 +20,7 @@ public class FPView : MonoBehaviour
 
     public GameObject eyes;             // handles view of the player (camera)
 
-    public GameObject text;             // the initial "start" text
+    // public GameObject text;             // the initial "start" text
 
     // view rotation direction
     float yaw;
@@ -51,7 +51,7 @@ public class FPView : MonoBehaviour
         {
             eyes.transform.localPosition = new Vector3(0, 0.5f, 0);
             eyes.transform.localRotation = Quaternion.identity;
-            text.SetActive(false);
+            // text.SetActive(false);
         }
 
         // player movement
@@ -72,7 +72,7 @@ public class FPView : MonoBehaviour
 
         // prevent the player from "flying"
         Vector3 temp = transform.position;
-        temp.y = Mathf.Clamp(transform.position.y, 0, 1);
+        temp.y = Mathf.Clamp(transform.position.y, 0, 6);
         transform.position = temp;
 
         // unlocks and unhides the mouse cursor

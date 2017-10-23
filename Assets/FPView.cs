@@ -30,6 +30,9 @@ public class FPView : MonoBehaviour
     float moveVertical;
     float moveHorizontal;
 
+    //Character ready to move or not
+    bool ready = false;
+
     void Start()
     {
         // uses CharacterController to handle collision
@@ -49,34 +52,39 @@ public class FPView : MonoBehaviour
         // move the camera to become the "eyes" of the player
         if (Input.GetKeyDown("space"))
         {
-            eyes.transform.localPosition = new Vector3(0, 0.5f, 0);
+            eyes.transform.localPosition = new Vector3(0, 0.5f, 0.2f);
             eyes.transform.localRotation = Quaternion.identity;
             text.SetActive(false);
+            ready = true;
         }
 
-        // player movement
-        moveHorizontal = Input.GetAxis("Horizontal") * speed;
-        moveVertical = Input.GetAxis("Vertical") * speed;
-        Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
+        if (ready == true)
+        {
+            // player movement
+            moveHorizontal = Input.GetAxis("Horizontal") * speed;
+            moveVertical = Input.GetAxis("Vertical") * speed;
+            Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 
-        // view rotation
-        yaw += Input.GetAxis("Mouse X") * sensitivity;
-        pitch -= Input.GetAxis("Mouse Y") * sensitivity;
+            // view rotation
+            yaw += Input.GetAxis("Mouse X") * sensitivity;
+            pitch -= Input.GetAxis("Mouse Y") * sensitivity;
 
-        // clamps the angle of vision of the player
-        transform.eulerAngles = new Vector3(Mathf.Clamp(pitch, -40f, 40f), yaw, 0f);
+            // clamps the angle of vision of the player
+            transform.eulerAngles = new Vector3(Mathf.Clamp(pitch, -40f, 40f), yaw, 0f);
 
-        // move player relative to current orientation
-        movement = transform.rotation * movement;
-        player.Move(movement * Time.deltaTime);
+            // move player relative to current orientation
+            movement = transform.rotation * movement;
+            player.Move(movement * Time.deltaTime);
 
-        // prevent the player from "flying"
-        Vector3 temp = transform.position;
-        temp.y = Mathf.Clamp(transform.position.y, 0, 1);
-        transform.position = temp;
+            // prevent the player from "flying"
+            Vector3 temp = transform.position;
+            temp.y = Mathf.Clamp(transform.position.y, 5.5f, 5.5f);
+            transform.position = temp;
 
-        // unlocks and unhides the mouse cursor
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Cursor.lockState = CursorLockMode.None;
+            // unlocks and unhides the mouse cursor
+            if (Input.GetKeyDown(KeyCode.Escape))
+                { Cursor.lockState = CursorLockMode.None; }
+
+        }
     }
 }
